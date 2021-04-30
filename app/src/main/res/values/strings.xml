@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GitHub Search User</string>
+    <string name="search_hint">Search GitHub User Here...</string>
+    <string name="github_rate_limit_title">GitHub API Rate Limit Hit!</string>
+    <string name="github_rate_limit_desc">Please try again after a couple of minutes!</string>
+    <string name="github_search_hint">Query must be at least 3 characters</string>
 </resources>
