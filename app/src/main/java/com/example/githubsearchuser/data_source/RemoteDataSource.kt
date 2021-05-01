@@ -6,5 +6,5 @@ import com.example.githubsearchuser.data.model.UserInfo
 
 interface RemoteDataSource {
     suspend fun getUsersList(name: String?): ResultList<List<GitHubUserListResult>>
-    suspend fun getUserInfo(name: String): ResultList<UserInfo>
+    suspend fun getUserInfo(name: String?): UserInfo
 }

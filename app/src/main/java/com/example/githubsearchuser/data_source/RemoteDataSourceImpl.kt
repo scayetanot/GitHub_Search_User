@@ -9,6 +9,8 @@ import com.example.githubsearchuser.data.model.User
 import com.example.githubsearchuser.data.model.UserInfo
 import com.example.githubsearchuser.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.*
@@ -18,17 +20,17 @@ class RemoteDataSourceImpl(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
     ) : RemoteDataSource {
     override suspend fun getUsersList(
-        name: String?): ResultList<List<GitHubUserListResult>> =
+        name: String?): ResultList<List<GitHubUserListResult>> {
         withContext(ioDispatcher) {
-            val request = api.searchUsers(name)
-            val userList: List<GitHubUserListResult> = request.forEach(
-                it.
-
-            )
-            ResultList.Success(userList)
+            val async = api.searchUsers(name).map {
+                    user -> async { getUserInfo(user.login) }
+            }
+            return ResultList.Success(async.awaitAll())
         }
+    }
 
-    override suspend fun getUserInfo(name: String): ResultList<UserInfo> {
+
+    override suspend fun getUserInfo(name: String?): UserInfo {
         withContext(ioDispatcher) {
             val request = api.getUsernameInfo(name)
             ResultList.Success(request)
